@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  nodejs:
+    build:
+      context: ./docker/nodejs
+      args:
+        - APP_ENV=${APP_ENV}
+    volumes:
+      - ./:/app
+    ports:
+      - '${DOCKER_NODE_PORT}:${DOCKER_NODE_PORT}'
+    environment:
+      - DOCKER_NODE_PORT=${DOCKER_NODE_PORT}
+    deploy:
+      resources:
+        limits:
+          memory: 5G
+    ulimits:
+      # выключаем генерацию core файла, когда нода падает.
+      core:
+        soft: "0"
+        hard: "0"
+      nofile:
+        soft: "9536"
+        hard: "9536"
